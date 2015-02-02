@@ -1,0 +1,38 @@
+MEMORY
+	{
+	flash(rx): ORIGIN = 0x0, LENGTH = 256K
+	RAML(!rx): ORIGIN = 0x1FFFE000, LENGTH = 8K
+	RAMH(!rx): ORIGIN = 0x20000000, LENGTH =	24K		
+	}
+_stack = ORIGIN(RAML) + LENGTH(RAMH);
+
+SECTIONS
+{
+	.text : {
+	*(.text)
+	}>RAMH
+	.rodata : {
+	*(.rodata)
+	}>RAMH
+	.data : {
+	*(.data)
+	}>RAMH
+	.bss : {
+	_bstart = .;
+	*(.bss)*(COMMON);
+	}>RAMH
+	_bend = .;
+}
+ENTRY(_start)
+
+SIM_SCGC5 = 0x40048038;
+PORTD_PCR5 = 0x4004C014;
+PORTE_PCR29 = 0x4004D074;
+GPIOD_PDDR = 0x400FF0D4;
+GPIOE_PDDR = 0x400FF114;
+GPIOD_PSOR = 0x400FF0C4;
+GPIOE_PSOR = 0x400FF104;
+GPIOD_PCOR = 0x400FF0C8;
+GPIOD_PTOR = 0x400FF0CC; 
+GPIOE_PCOR = 0x400FF108; 
+GPIOE_PTOR = 0x400FF10C; 
